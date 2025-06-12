@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var prettyjson = require('../lib/prettyjson');
+var prettyjson = require('../lib/superprettyjson');
 var fs = require('fs');
 var colors = require('@colors/colors/safe');
 var argv = require('minimist')(process.argv.slice(2));
