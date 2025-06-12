@@ -28,7 +28,7 @@ test("getMaxIndexLength: handles mixed value types", (t) => {
     boolean: true,
     array: [1, 2, 3],
     object: { nested: true },
-    string: "string"
+    string: "string",
   };
   t.is(getMaxIndexLength(d), 7);
 });
