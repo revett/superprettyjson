@@ -14,6 +14,25 @@ test("getMaxIndexLength: should return longest key length", (t) => {
   t.is(getMaxIndexLength(d), 11);
 });
 
+test("getMaxIndexLength: skips undefined values", (t) => {
+  const d = {
+    batman: "Bruce Wayne",
+    wonderwoman: undefined,
+  };
+  t.is(getMaxIndexLength(d), 6);
+});
+
+test("getMaxIndexLength: handles mixed value types", (t) => {
+  const d = {
+    number: 42,
+    boolean: true,
+    array: [1, 2, 3],
+    object: { nested: true },
+    string: "string",
+  };
+  t.is(getMaxIndexLength(d), 7);
+});
+
 test("indent: should return empty string", (t) => {
   t.is(indent(0), "");
 });
