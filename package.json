@@ -40,7 +40,6 @@
   },
   "bin": {
     "superprettyjson": "./bin/superprettyjson",
-    "prettyjson": "./bin/superprettyjson",
     "spj": "./bin/superprettyjson"
   },
   "exports": {
