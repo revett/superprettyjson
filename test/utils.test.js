@@ -1,6 +1,10 @@
 const test = require("ava");
 const { getMaxIndexLength, indent } = require("../lib/utils.js");
 
+test.todo("addColorToData: TODO");
+
+test.todo("colorMultilineString: TODO");
+
 test("getMaxIndexLength: should return 0 for empty object", (t) => {
   t.is(getMaxIndexLength({}), 0);
 });
@@ -48,3 +52,11 @@ test("indent: should return multiple spaces", (t) => {
 test("indent: should handle negative values", (t) => {
   t.is(indent(-1), "");
 });
+
+test.todo("indentLines: TODO");
+
+test.todo("isPrintable: TODO");
+
+test.todo("isSerializable: TODO");
+
+test.todo("renderToArray: TODO");

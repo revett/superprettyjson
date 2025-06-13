@@ -1,16 +1,14 @@
 {
-  "author": "Charlie Revett <superprettyjson@revdex.fastmail.com> (https://github.com/revett)",
+  "author": "Charlie Revett <superprettyjson@revdex.fastmail.com> (https://revcd.com)",
   "name": "superprettyjson",
   "description": "Format JSON data in a colored YAML-style, perfect for CLI output",
   "version": "1.3.0",
   "homepage": "http://github.com/revett/superprettyjson",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/revett/superprettyjson.git"
-  },
+  "repository": "github:revett/superprettyjson",
   "bugs": {
-    "url": "https://github.com/revett/superprettyjson/issues"
+    "url": "https://github.com/revett/superprettyjson/issues",
+    "email": "superprettyjson@revdex.fastmail.com"
   },
   "keywords": [
     "syntax-highlighting",
@@ -18,14 +16,12 @@
     "json",
     "formatting",
     "colors",
-    "pretty-print"
+    "pretty-print",
+    "yaml",
+    "console"
   ],
   "contributors": [
-    {
-      "name": "Rafael de Oleza",
-      "email": "rafeca@gmail.com",
-      "url": "https://github.com/rafeca"
-    }
+    "Rafael de Oleza <rafeca@fastmail.com> (https://rafeca.com)"
   ],
   "engines": {
     "node": ">=18"
