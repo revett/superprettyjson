@@ -1,53 +1,61 @@
 #!/usr/bin/env node
 
-const prettyjson = require("../lib/superprettyjson");
+const spj = require("../lib/superprettyjson");
 const fs = require("node:fs");
 const colors = require("@colors/colors/safe");
 const argv = require("minimist")(process.argv.slice(2));
 
-const options = {
-  keysColor: argv.keys || process.env.PRETTYJSON_KEYS,
-  dashColor: argv.dash || process.env.PRETTYJSON_DASH,
-  defaultIndentation: argv.indent || process.env.PRETTYJSON_INDENT,
-  stringColor: argv.string || process.env.PRETTYJSON_STRING,
-  multilineStringColor: argv.multiline_string || process.env.PRETTYJSON_MULTILINE_STRING,
-  numberColor: argv.number || process.env.PRETTYJSON_NUMBER,
-  positiveNumberColor: argv.number || process.env.PRETTYJSON_NUMBER_POSITIVE,
-  negativeNumberColor: argv.number || process.env.PRETTYJSON_NUMBER_NEGATIVE,
-  noColor: argv.nocolor || process.env.PRETTYJSON_NOCOLOR,
-  noAlign: argv.noalign || process.env.PRETTYJSON_NOALIGN,
-  escape: argv.escape || process.env.PRETTYJSON_ESCAPE,
-  inlineArrays: argv["inline-arrays"] || process.env.PRETTYJSON_INLINE_ARRAYS,
+const opts = {
+  keysColor: argv.keys || process.env.SUPERPRETTYJSON_KEYS,
+  dashColor: argv.dash || process.env.SUPERPRETTYJSON_DASH,
+  defaultIndentation: argv.indent || process.env.SUPERPRETTYJSON_INDENT,
+  stringColor: argv.string || process.env.SUPERPRETTYJSON_STRING,
+  multilineStringColor: argv.multiline_string || process.env.SUPERPRETTYJSON_MULTILINE_STRING,
+  numberColor: argv.number || process.env.SUPERPRETTYJSON_NUMBER,
+  positiveNumberColor: argv.number || process.env.SUPERPRETTYJSON_NUMBER_POSITIVE,
+  negativeNumberColor: argv.number || process.env.SUPERPRETTYJSON_NUMBER_NEGATIVE,
+  noColor: argv.nocolor || process.env.SUPERPRETTYJSON_NOCOLOR,
+  noAlign: argv.noalign || process.env.SUPERPRETTYJSON_NOALIGN,
+  escape: argv.escape || process.env.SUPERPRETTYJSON_ESCAPE,
+  inlineArrays: argv["inline-arrays"] || process.env.SUPERPRETTYJSON_INLINE_ARRAYS,
 };
 
-const renderInputJson = (input) => {
-  console.log(prettyjson.renderString(input, options));
-};
-
-if (argv._.length) {
-  // First parameter is the file to read and parse
-  const filename = argv._[0];
+const renderFile = (filename) => {
   try {
-    renderInputJson(fs.readFileSync(filename, "utf8"));
+    const f = fs.readFileSync(filename, "utf8");
+    console.log(spj.renderString(f, opts));
   } catch (e) {
     console.error(colors.red(`Error: File '${filename}' does not exist`));
     process.exit(1);
   }
-} else {
-  // Read input stream
-  let streamData = "";
+};
+
+const renderStream = () => {
+  let stream = "";
 
   process.stdin.resume();
   process.stdin.setEncoding("utf8");
+
   process.stdin.on("data", (chunk) => {
     if (chunk === "\n") {
-      renderInputJson(streamData);
-      streamData = "";
+      console.log(spj.renderString(stream, opts));
+      stream = "";
       return;
     }
-    streamData += chunk;
+    stream += chunk;
   });
+
   process.stdin.on("end", () => {
-    renderInputJson(streamData);
+    console.log(spj.renderString(stream, opts));
   });
+};
+
+// Parsed positional arguments, not flags
+const params = argv._;
+
+// Handle routing to correct render function
+if (params.length > 0) {
+  renderFile(params[0]);
+} else {
+  renderStream();
 }
