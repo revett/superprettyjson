@@ -28,37 +28,26 @@
     }
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
-  "type": "commonjs",
   "main": "./lib/superprettyjson",
   "files": ["bin/superprettyjson", "lib/*.js"],
   "scripts": {
     "biome:check": "biome check .",
     "biome:fix": "biome check --write .",
-    "test": "ava"
+    "test": "ava",
+    "test:watch": "ava --watch"
   },
   "bin": {
     "superprettyjson": "./bin/superprettyjson",
     "spj": "./bin/superprettyjson"
   },
-  "exports": {
-    ".": {
-      "require": "./lib/superprettyjson.js"
-    }
-  },
   "dependencies": {
-    "@colors/colors": "1.5.0",
-    "minimist": "^1.2.0"
+    "@colors/colors": "^1.6.0",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "ava": "^6.4.0",
-    "coveralls": "^2.11.15",
-    "istanbul": "^0.4.5",
-    "jshint": "^2.9.4",
-    "mocha": "^3.1.2",
-    "mocha-lcov-reporter": "^1.2.0",
-    "should": "^11.1.1"
+    "ava": "^6.4.0"
   }
 }
