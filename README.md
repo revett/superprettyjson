@@ -30,7 +30,7 @@ superprettyjson package.json
 CLI to see the JSON result in a clearer way:
 
 ```bash
-curl https://api.github.com/users/rafeca | superprettyjson
+curl https://api.github.com/users/revett | superprettyjson
 ```
 
 ![Example 2](https://raw.github.com/rafeca/prettyjson/master/images/example4.png)

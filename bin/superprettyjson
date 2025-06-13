@@ -1,36 +1,22 @@
 #!/usr/bin/env node
 
-const spj = require("../lib/superprettyjson");
 const fs = require("node:fs");
 const colors = require("@colors/colors/safe");
 const argv = require("minimist")(process.argv.slice(2));
+const { renderString } = require("../lib/superprettyjson");
+const { parseFlags } = require("../lib/config.js");
 
-const opts = {
-  keysColor: argv.keys || process.env.SUPERPRETTYJSON_KEYS,
-  dashColor: argv.dash || process.env.SUPERPRETTYJSON_DASH,
-  defaultIndentation: argv.indent || process.env.SUPERPRETTYJSON_INDENT,
-  stringColor: argv.string || process.env.SUPERPRETTYJSON_STRING,
-  multilineStringColor: argv.multiline_string || process.env.SUPERPRETTYJSON_MULTILINE_STRING,
-  numberColor: argv.number || process.env.SUPERPRETTYJSON_NUMBER,
-  positiveNumberColor: argv.number || process.env.SUPERPRETTYJSON_NUMBER_POSITIVE,
-  negativeNumberColor: argv.number || process.env.SUPERPRETTYJSON_NUMBER_NEGATIVE,
-  noColor: argv.nocolor || process.env.SUPERPRETTYJSON_NOCOLOR,
-  noAlign: argv.noalign || process.env.SUPERPRETTYJSON_NOALIGN,
-  escape: argv.escape || process.env.SUPERPRETTYJSON_ESCAPE,
-  inlineArrays: argv["inline-arrays"] || process.env.SUPERPRETTYJSON_INLINE_ARRAYS,
-};
-
-const renderFile = (filename) => {
+const renderFile = (filename, cfg) => {
   try {
     const f = fs.readFileSync(filename, "utf8");
-    console.log(spj.renderString(f, opts));
+    console.log(spj.renderString(f, cfg));
   } catch (e) {
     console.error(colors.red(`Error: File '${filename}' does not exist`));
     process.exit(1);
   }
 };
 
-const renderStream = () => {
+const renderStream = (cfg) => {
   let stream = "";
 
   process.stdin.resume();
@@ -38,7 +24,7 @@ const renderStream = () => {
 
   process.stdin.on("data", (chunk) => {
     if (chunk === "\n") {
-      console.log(spj.renderString(stream, opts));
+      console.log(renderString(stream, cfg));
       stream = "";
       return;
     }
@@ -46,16 +32,19 @@ const renderStream = () => {
   });
 
   process.stdin.on("end", () => {
-    console.log(spj.renderString(stream, opts));
+    console.log(renderString(stream, cfg));
   });
 };
+
+// Parse flags to config object, falling back to environment variables
+const cfg = parseFlags(argv, process.env);
 
 // Parsed positional arguments, not flags
 const params = argv._;
 
 // Handle routing to correct render function
 if (params.length > 0) {
-  renderFile(params[0]);
+  renderFile(params[0], cfg);
 } else {
-  renderStream();
+  renderStream(cfg);
 }
