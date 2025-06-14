@@ -14,7 +14,6 @@ const renderFile = (filename, cfg) => {
     // Print specific error message for file not found to not introduce a breaking change
     if (e.code === "ENOENT") {
       console.error(colors.red(`Error: File '${filename}' does not exist`));
-      process.exit(1);
     } else {
       console.error(e);
     }
