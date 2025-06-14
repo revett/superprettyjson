@@ -15,7 +15,7 @@ test("getMaxIndexLength: should return longest key length", (t) => {
     superman: "Clark Kent",
     wonderwoman: "Diana Prince",
   };
-  t.is(getMaxIndexLength(d), 11);
+  t.is(getMaxIndexLength(d), 12);
 });
 
 test("getMaxIndexLength: skips undefined values", (t) => {

@@ -3,7 +3,7 @@
 const fs = require("node:fs");
 const colors = require("@colors/colors/safe");
 const argv = require("minimist")(process.argv.slice(2));
-const { renderString } = require("../lib/superprettyjson");
+const { renderString } = require("../lib/superprettyjson.js");
 const { parseFlags } = require("../lib/config.js");
 
 const renderFile = (filename, cfg) => {
