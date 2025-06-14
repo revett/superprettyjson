@@ -1,6 +1,6 @@
 # superprettyjson
 
-Format JSON data in a colored YAML-style, perfect for CLI output.
+Format JSON data in a colored YAML style, perfect for CLI output.
 
 ## Install
 
