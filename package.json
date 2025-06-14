@@ -1,7 +1,7 @@
 {
   "author": "Charlie Revett <superprettyjson@revdex.fastmail.com> (https://revcd.com)",
   "name": "superprettyjson",
-  "description": "Format JSON data in a colored YAML-style, perfect for CLI output",
+  "description": "Format JSON data in a colored YAML style, perfect for CLI output",
   "version": "1.3.0",
   "homepage": "http://github.com/revett/superprettyjson",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "biome:check": "biome check .",
     "biome:fix": "biome check --write .",
     "test": "c8 --reporter=lcov --reporter=text-summary --reporter=text ava",
+    "test:watch": "ava --watch",
     "test:open-coverage-report": "open coverage/lcov-report/index.html",
     "test:ci": "ava --tap | tap-xunit > test-results.xml"
   },
