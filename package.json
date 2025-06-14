@@ -34,7 +34,7 @@
     "test": "ava",
     "test:coverage": "c8 ava",
     "test:watch": "ava --watch",
-    "test:ci": "ava --tap | tap-xunit"
+    "test:ci": "ava --tap | tap-xunit > test-results.xml"
   },
   "bin": {
     "superprettyjson": "./bin/superprettyjson",
