@@ -1,12 +1,20 @@
 const test = require("ava");
 const { spawn } = require("node:child_process");
 const path = require("node:path");
+const { deepEqualMultiline } = require("./helpers");
 
 test("cli: formats JSON from stdin", async (t) => {
   const cli = spawn("node", [path.join(__dirname, "../bin/superprettyjson"), "--nocolor"]);
   const data = {
     message: "hello world",
     items: [1, 2, 3],
+    nested: {
+      number: 37,
+      "more-nests": {
+        truthy: true,
+        falsey: false,
+      },
+    },
   };
 
   cli.stdin.write(JSON.stringify(data));
@@ -33,8 +41,17 @@ test("cli: formats JSON from stdin", async (t) => {
     });
   });
 
-  t.true(output.includes("message: hello world"));
-  t.true(output.includes("- 1"));
-  t.true(output.includes("- 2"));
-  t.true(output.includes("- 3"));
+  const expected = [
+    "message: hello world",
+    "items: ",
+    "  - 1",
+    "  - 2",
+    "  - 3",
+    "nested: ",
+    "  number:     37",
+    "  more-nests: ",
+    "    truthy: true",
+    "    falsey: false",
+  ];
+  deepEqualMultiline(t, output, expected);
 });
