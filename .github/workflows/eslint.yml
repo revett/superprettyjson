@@ -16,4 +16,4 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run ESLint
-        run: eslint . --max-warnings 0
+        run: npm run eslint:check
