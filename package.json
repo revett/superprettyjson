@@ -31,8 +31,8 @@
   "scripts": {
     "biome:check": "biome check .",
     "biome:fix": "biome check --write .",
-    "test": "c8 --all --reporter=text ava",
-    "test:ci": "c8 ava --tap | tap-xunit > test-results.xml"
+    "test": "c8 ava",
+    "test:ci": "ava --tap | tap-xunit > test-results.xml"
   },
   "bin": {
     "superprettyjson": "./bin/superprettyjson.js",
