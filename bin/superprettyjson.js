@@ -3,13 +3,13 @@
 const fs = require("node:fs");
 const colors = require("@colors/colors/safe");
 const argv = require("minimist")(process.argv.slice(2));
-const { renderString } = require("../lib/superprettyjson");
+const { renderString } = require("../lib/superprettyjson.js");
 const { parseFlags } = require("../lib/config.js");
 
 const renderFile = (filename, cfg) => {
   try {
     const f = fs.readFileSync(filename, "utf8");
-    console.log(spj.renderString(f, cfg));
+    console.log(renderString(f, cfg));
   } catch (e) {
     console.error(colors.red(`Error: File '${filename}' does not exist`));
     process.exit(1);
