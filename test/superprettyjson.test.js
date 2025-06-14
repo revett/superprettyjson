@@ -3,44 +3,44 @@ const colors = require("@colors/colors/safe");
 const { render, renderString } = require("../lib/superprettyjson");
 const { deepEqualMultiline } = require("./helpers");
 
-test("render: outputs string same as input", (t) => {
+test("render: string", (t) => {
   const input = "This is a string";
   const expected = [input];
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs string with indentation", (t) => {
+test("render: string with indentation", (t) => {
   const input = "This is a string";
   const expected = [`    ${input}`];
   deepEqualMultiline(t, render(input, {}, 4), expected);
 });
 
-test("render: outputs multiline string with indentation", (t) => {
+test("render: multiline string with indentation", (t) => {
   const input = "multiple\nlines";
   const expected = [`    """`, "      multiple", "      lines", `    """`];
   deepEqualMultiline(t, render(input, {}, 4), expected);
 });
 
-test("render: outputs escaped string if have conflict chars", (t) => {
+test("render: handles escaped string with conflict chars", (t) => {
   const input = "#irchannel";
   const cfg = { escape: true };
   const expected = [`    "#irchannel"`];
   deepEqualMultiline(t, render(input, cfg, 4), expected);
 });
 
-test("render: outputs array of strings", (t) => {
+test("render: array", (t) => {
   const input = ["first string", "second string"];
   const expected = [`${colors.green("- ")}${input[0]}`, `${colors.green("- ")}${input[1]}`];
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs function", (t) => {
+test("render: function", (t) => {
   const input = ["first string", (a) => a];
   const expected = [`${colors.green("- ")}${input[0]}`, `${colors.green("- ")}function() {}`];
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs array of arrays", (t) => {
+test("render: nested array", (t) => {
   const input = ["first string", ["nested 1", "nested 2"], "second string"];
   const expected = [
     `${colors.green("- ")}${input[0]}`,
@@ -52,7 +52,7 @@ test("render: outputs array of arrays", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs hash of strings", (t) => {
+test("render: object", (t) => {
   const input = { param1: "first string", param2: "second string" };
   const expected = [
     `${colors.green("param1: ")}${input.param1}`,
@@ -61,7 +61,7 @@ test("render: outputs hash of strings", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs hash of hashes", (t) => {
+test("render: nested object", (t) => {
   const input = {
     firstParam: { subparam: "first string", subparam2: "another string" },
     secondParam: "second string",
@@ -75,7 +75,7 @@ test("render: outputs hash of hashes", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs hash of strings with large keys", (t) => {
+test("render: correctly aligns largs object keys", (t) => {
   const input = { veryLargeParam: "first string", param: "second string" };
   const expected = [
     `${colors.green("veryLargeParam: ")}first string`,
@@ -84,7 +84,7 @@ test("render: outputs hash of strings with large keys", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs hash of strings with noAlign", (t) => {
+test("render: respects noAlign", (t) => {
   const input = { veryLargeParam: "first string", param: "second string" };
   const expected = [
     `${colors.green("veryLargeParam: ")}first string`,
@@ -93,7 +93,7 @@ test("render: outputs hash of strings with noAlign", (t) => {
   deepEqualMultiline(t, render(input, { noAlign: true }), expected);
 });
 
-test("render: outputs really nested object", (t) => {
+test("render: complex nested object", (t) => {
   const input = {
     firstParam: {
       subparam: "first string",
@@ -123,7 +123,7 @@ test("render: outputs really nested object", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: outputs hash of strings with keysColor", (t) => {
+test("render: respects keysColor", (t) => {
   const input = { param1: "first string", param2: "second string" };
   const expected = [
     `${colors.blue("param1: ")}first string`,
@@ -132,7 +132,7 @@ test("render: outputs hash of strings with keysColor", (t) => {
   deepEqualMultiline(t, render(input, { keysColor: "blue" }), expected);
 });
 
-test("render: outputs hash of strings with numberColor", (t) => {
+test("render: respects numberColor", (t) => {
   const input = { param1: 17, param2: 22.3 };
   const expected = [
     `${colors.green("param1: ")}${colors.red("17")}`,
@@ -141,7 +141,7 @@ test("render: outputs hash of strings with numberColor", (t) => {
   deepEqualMultiline(t, render(input, { numberColor: "red" }), expected);
 });
 
-test("render: outputs hash of strings with positiveNumberColor", (t) => {
+test("render: respects positiveNumberColor", (t) => {
   const input = { param1: 17, param2: -22.3 };
   const expected = [
     `${colors.green("param1: ")}${colors.red("17")}`,
@@ -150,7 +150,7 @@ test("render: outputs hash of strings with positiveNumberColor", (t) => {
   deepEqualMultiline(t, render(input, { positiveNumberColor: "red" }), expected);
 });
 
-test("render: outputs hash of strings with negativeNumberColor", (t) => {
+test("render: respects negativeNumberColor", (t) => {
   const input = { param1: 17, param2: -22.3 };
   const expected = [
     `${colors.green("param1: ")}${colors.blue("17")}`,
@@ -159,7 +159,7 @@ test("render: outputs hash of strings with negativeNumberColor", (t) => {
   deepEqualMultiline(t, render(input, { negativeNumberColor: "red" }), expected);
 });
 
-test("render: outputs hash of strings with rainbow keys", (t) => {
+test("render: outputs using rainbow keys color pattern", (t) => {
   const input = { paramLong: "first string", param2: "second string" };
   const expected = [
     `${colors.rainbow("paramLong: ")}first string`,
@@ -168,7 +168,7 @@ test("render: outputs hash of strings with rainbow keys", (t) => {
   deepEqualMultiline(t, render(input, { keysColor: "rainbow" }), expected);
 });
 
-test("render: outputs hash of strings with defaultIndentation", (t) => {
+test("render: respects defaultIndentation", (t) => {
   const input = { param: ["first string", "second string"] };
   const expected = [
     `${colors.green("param: ")}`,
@@ -178,22 +178,22 @@ test("render: outputs hash of strings with defaultIndentation", (t) => {
   deepEqualMultiline(t, render(input, { defaultIndentation: 4 }), expected);
 });
 
-test("render: outputs empty array with emptyArrayMsg", (t) => {
+test("render: respects emptyArrayMsg", (t) => {
   const input = [];
   const expected = ["(empty)"];
   deepEqualMultiline(t, render(input, { emptyArrayMsg: "(empty)" }), expected);
 });
 
-test("render: outputs hash of strings with stringColor", (t) => {
+test("render: respects stringColor", (t) => {
   const input = { param1: "first string", param2: "second string" };
   const expected = [
-    `${colors.blue("param1: ")}${colors.red("first string")}`,
-    `${colors.blue("param2: ")}${colors.red("second string")}`,
+    `${colors.green("param1: ")}${colors.red("first string")}`,
+    `${colors.green("param2: ")}${colors.red("second string")}`,
   ];
-  deepEqualMultiline(t, render(input, { keysColor: "blue", stringColor: "red" }), expected);
+  deepEqualMultiline(t, render(input, { stringColor: "red" }), expected);
 });
 
-test("render: outputs multiline string with multilineStringColor", (t) => {
+test("render: respects multilineStringColor", (t) => {
   const input = "first line string\nsecond line string";
   const expected = [
     `${colors.red('"""')}`,
@@ -204,19 +204,19 @@ test("render: outputs multiline string with multilineStringColor", (t) => {
   deepEqualMultiline(t, render(input, { multilineStringColor: "red" }), expected);
 });
 
-test("render: outputs hash of strings with noColor", (t) => {
+test("render: respects noColor", (t) => {
   const input = { param1: "first string", param2: "second string" };
   const expected = ["param1: first string", "param2: second string"];
   deepEqualMultiline(t, render(input, { noColor: true }), expected);
 });
 
-test("render: outputs hash of simple array with inlineArrays", (t) => {
+test("render: uses inlineArrays to output simple array", (t) => {
   const input = { installs: ["first string", "second string", false, 13] };
   const expected = [`${colors.green("installs: ")}first string, second string, false, 13`];
   deepEqualMultiline(t, render(input, { inlineArrays: true }), expected);
 });
 
-test("render: outputs hash of complex array with inlineArrays", (t) => {
+test("render: uses inlineArrays to output complex nested arrays", (t) => {
   const input = { installs: [["first string", "second string"], "third string"] };
   const expected = [
     `${colors.green("installs: ")}`,
@@ -226,7 +226,7 @@ test("render: outputs hash of complex array with inlineArrays", (t) => {
   deepEqualMultiline(t, render(input, { inlineArrays: true }), expected);
 });
 
-test("render: does not print an object prototype", (t) => {
+test("render: ignores object prototype", (t) => {
   const Input = function () {
     this.param1 = "first string";
     this.param2 = "second string";
@@ -239,9 +239,33 @@ test("render: does not print an object prototype", (t) => {
   deepEqualMultiline(t, render(new Input()), expected);
 });
 
+test("render: outputs number", (t) => {
+  const input = 12345;
+  const expected = [colors.blue("12345")];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+test("render: outputs truthy boolean", (t) => {
+  const input = true;
+  const expected = [colors.green("true")];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+test("render: falsy boolean", (t) => {
+  const input = false;
+  const expected = [colors.red("false")];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+test("render: null object", (t) => {
+  const input = null;
+  const expected = [colors.grey("null")];
+  deepEqualMultiline(t, render(input), expected);
+});
+
 // TODO: Migrate other existing tests from test/prettyjson_spec.js for render()
 
-test("renderString: works with valid JSON string", (t) => {
+test("renderString: valid JSON string", (t) => {
   const input = '{"test": "OK"}';
   const expected = [`${colors.green("test: ")}OK`];
   deepEqualMultiline(t, renderString(input), expected);
