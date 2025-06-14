@@ -31,7 +31,8 @@
   "scripts": {
     "biome:check": "biome check .",
     "biome:fix": "biome check --write .",
-    "test": "c8 ava",
+    "test": "c8 --reporter=lcov --reporter=text-summary --reporter=text ava",
+    "test:open-coverage-report": "open coverage/lcov-report/index.html",
     "test:ci": "ava --tap | tap-xunit > test-results.xml"
   },
   "bin": {
