@@ -19,6 +19,7 @@ jobs:
         run: npm test
       - name: Output test results
         run: npm run test:ci
+        if: (!cancelled())
       - name: Publish test results
         uses: enricomi/publish-unit-test-result-action@v2
         if: (!cancelled())
