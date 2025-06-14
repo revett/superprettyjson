@@ -75,7 +75,7 @@ test("render: nested object", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-test("render: correctly aligns largs object keys", (t) => {
+test("render: aligns largs object keys", (t) => {
   const input = { veryLargeParam: "first string", param: "second string" };
   const expected = [
     `${colors.green("veryLargeParam: ")}first string`,
@@ -263,7 +263,91 @@ test("render: null object", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-// TODO: Migrate other existing tests from test/prettyjson_spec.js for render()
+test("render: ignores undefined value", (t) => {
+  deepEqualMultiline(t, render(undefined), []);
+});
+
+test("render: config.renderUndefined with standalone value", (t) => {
+  const expected = [colors.grey("undefined")];
+  deepEqualMultiline(t, render(undefined, { renderUndefined: true }), expected);
+});
+
+test("render: ignores undefined values within object", (t) => {
+  const input = {
+    foo: undefined,
+    bar: [1, undefined, 2],
+  };
+  const expected = [
+    `${colors.green("bar: ")}`,
+    `  ${colors.green("- ")}${colors.blue(1)}`,
+    `  ${colors.green("- ")}${colors.blue(2)}`,
+  ];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+test("render: config.renderUndefined with object", (t) => {
+  const input = {
+    foo: undefined,
+    bar: [1, undefined, 2],
+  };
+  const expected = [
+    `${colors.green("foo: ")}${colors.grey("undefined")}`,
+    `${colors.green("bar: ")}`,
+    `  ${colors.green("- ")}${colors.blue(1)}`,
+    `  ${colors.green("- ")}${colors.grey("undefined")}`,
+    `  ${colors.green("- ")}${colors.blue(2)}`,
+  ];
+  deepEqualMultiline(t, render(input, { renderUndefined: true }), expected);
+});
+
+test("render: Error", (t) => {
+  Error.stackTraceLimit = 1;
+  const input = new Error("foo");
+  const stack = input.stack.split("\n");
+  const expected = [
+    `${colors.green("message: ")}foo`,
+    `${colors.green("stack: ")}`,
+    `  ${colors.green("- ")}${stack[0]}`,
+    `  ${colors.green("- ")}${stack[1]}`,
+  ];
+  deepEqualMultiline(t, render(input, { noEscape: true }), expected);
+});
+
+test("render: serializable items in an array inline", (t) => {
+  const now = new Date();
+  const input = ["a", 3, null, true, undefined, false, now];
+  const expected = [
+    `${colors.green("- ")}a`,
+    `${colors.green("- ")}${colors.blue("3")}`,
+    `${colors.green("- ")}${colors.grey("null")}`,
+    `${colors.green("- ")}${colors.green("true")}`,
+    `${colors.green("- ")}${colors.red("false")}`,
+    `${colors.green("- ")}${now}`,
+  ];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+test("render: date", (t) => {
+  const input = new Date();
+  const expected = [input.toString()];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+test("render: dates in object", (t) => {
+  const today = new Date();
+  const tomorrow = new Date();
+  const input = { today, tomorrow };
+  const expected = [
+    `${colors.green("today: ")}   ${today.toString()}`,
+    `${colors.green("tomorrow: ")}${tomorrow.toString()}`,
+  ];
+  deepEqualMultiline(t, render(input), expected);
+});
+
+// TODO: Go over test titles
+// TODO: Group tests together that make sense
+// TODO: Make input data within all tests consistent
+// TODO: Move to table tests?
 
 test("renderString: valid JSON string", (t) => {
   const input = '{"test": "OK"}';
