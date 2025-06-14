@@ -12,8 +12,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
       - name: Install dependencies
         run: npm ci
       - name: Run tests via avajs/ava
-        run: npm test
+        run: npm run test:ci > test-results.xml
+      - name: Publish test results
+        uses: enricomi/publish-unit-test-result-action@v2
+        if: (!cancelled())
+        with:
+          files: test-results.xml

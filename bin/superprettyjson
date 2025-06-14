@@ -9,7 +9,7 @@ const { parseFlags } = require("../lib/config.js");
 const renderFile = (filename, cfg) => {
   try {
     const f = fs.readFileSync(filename, "utf8");
-    console.log(spj.renderString(f, cfg));
+    console.log(renderString(f, cfg));
   } catch (e) {
     console.error(colors.red(`Error: File '${filename}' does not exist`));
     process.exit(1);
