@@ -9,7 +9,7 @@ const deepEqualMultiline = (t, output, expected) => {
   const outputLines = output.split("\n");
 
   const lastLine = outputLines[outputLines.length - 1];
-  if (lastLine === "") {
+  if (lastLine === "" && output.length > 1) {
     outputLines.pop();
   }
 

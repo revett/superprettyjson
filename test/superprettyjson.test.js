@@ -264,7 +264,17 @@ test("render: null object", (t) => {
 });
 
 test("render: ignores undefined value", (t) => {
-  deepEqualMultiline(t, render(undefined), []);
+  deepEqualMultiline(t, render(undefined), [""]);
+});
+
+test("render: ignores undefined values in array", (t) => {
+  const input = [1, undefined, 2, undefined, 3];
+  const expected = [
+    `${colors.green("- ")}${colors.blue(1)}`,
+    `${colors.green("- ")}${colors.blue(2)}`,
+    `${colors.green("- ")}${colors.blue(3)}`,
+  ];
+  deepEqualMultiline(t, render(input), expected);
 });
 
 test("render: config.renderUndefined with standalone value", (t) => {
@@ -344,10 +354,19 @@ test("render: dates in object", (t) => {
   deepEqualMultiline(t, render(input), expected);
 });
 
-// TODO: Go over test titles
-// TODO: Group tests together that make sense
-// TODO: Make input data within all tests consistent
-// TODO: Move to table tests?
+test("renderString: empty string", (t) => {
+  t.is(renderString(""), "");
+});
+
+test("renderString: returns empty string if input not a string", (t) => {
+  t.is(renderString({}), "");
+});
+
+test("renderString: returns error on invalid JSON", (t) => {
+  const input = "not valid!!";
+  const expected = `${colors.red("Error:")} Not valid JSON!`;
+  t.is(renderString(input), expected);
+});
 
 test("renderString: valid JSON string", (t) => {
   const input = '{"test": "OK"}';
@@ -355,4 +374,20 @@ test("renderString: valid JSON string", (t) => {
   deepEqualMultiline(t, renderString(input), expected);
 });
 
-// TODO: Migrate other existing tests from test/prettyjson_spec.js for renderString()
+test("renderString: dismiss trailing characters which are not JSON", (t) => {
+  const input = `characters that are not JSON at all... {"test": "OK"}`;
+  const expected = ["characters that are not JSON at all... ", `${colors.green("test: ")}OK`];
+  deepEqualMultiline(t, renderString(input), expected);
+});
+
+test("renderString: dismiss trailing characters which are not JSON (array)", (t) => {
+  const input = `characters that are not JSON at all... ["test"]`;
+  const expected = ["characters that are not JSON at all... ", `${colors.green("- ")}test`];
+  deepEqualMultiline(t, renderString(input), expected);
+});
+
+test("renderString: accepts options parameter", (t) => {
+  const input = '{"test": "OK"}';
+  const expected = [`${colors.green("test: ")}${colors.red("OK")}`];
+  deepEqualMultiline(t, renderString(input, { stringColor: "red" }), expected);
+});
