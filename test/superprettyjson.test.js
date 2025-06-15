@@ -364,8 +364,11 @@ test("renderString: returns empty string if input not a string", (t) => {
 
 test("renderString: returns error on invalid JSON", (t) => {
   const input = "not valid!!";
-  const expected = `${colors.red("Error:")} Not valid JSON!`;
-  t.is(renderString(input), expected);
+  try {
+    renderString(input);
+  } catch (e) {
+    t.is(e.message, "Not valid JSON!");
+  }
 });
 
 test("renderString: valid JSON string", (t) => {

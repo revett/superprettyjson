@@ -1,19 +1,21 @@
 #!/usr/bin/env node
 
 const fs = require("node:fs");
-const colors = require("@colors/colors/safe");
 const argv = require("minimist")(process.argv.slice(2));
 const { renderString } = require("../lib/superprettyjson.js");
 const { parseFlags } = require("../lib/config.js");
+const { formatError } = require("../lib/utils.js");
 
 const renderFile = (filename, cfg) => {
   try {
     const f = fs.readFileSync(filename, "utf8");
     console.log(renderString(f, cfg));
   } catch (e) {
-    // Print specific error message for file not found to not introduce a breaking change
+    // Print specific errors for ENOENT and InvalidJSON to avoid breaking changes from v1.2.5
     if (e.code === "ENOENT") {
-      console.error(colors.red(`Error: File '${filename}' does not exist`));
+      console.error(formatError(`File '${filename}' does not exist`, cfg.noColor));
+    } else if (e.message === "Not valid JSON!") {
+      console.error(formatError("Not valid JSON!", cfg.noColor));
     } else {
       console.error(e);
     }
