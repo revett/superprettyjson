@@ -37,7 +37,7 @@ test("integration: stream via stdin", async (t) => {
     const { stdout: output } = await execa({ input: JSON.stringify(data) })`${binPath} --nocolor=1`;
     deepEqualMultiline(t, output, expected);
   } catch (e) {
-    t.fail(e.message);
+    t.fail();
   }
 });
 
@@ -56,7 +56,7 @@ test("integration: file", async (t) => {
     const { stdout: output } = await execa`node ${binPath} --nocolor=1 ${fixturePath}`;
     deepEqualMultiline(t, output, expected);
   } catch (e) {
-    t.fail(e.message);
+    t.fail();
   } finally {
     t.notThrows(() => {
       unlinkSync(fixturePath);
