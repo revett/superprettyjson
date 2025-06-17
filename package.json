@@ -27,10 +27,7 @@
     "node": ">=18"
   },
   "main": "./lib/superprettyjson",
-  "files": [
-    "bin/superprettyjson",
-    "lib/*.js"
-  ],
+  "files": ["bin/superprettyjson", "lib/*.js"],
   "scripts": {
     "biome:check": "biome check .",
     "biome:fix": "biome check --write .",
@@ -62,8 +59,6 @@
     "tap-xunit": "^2.4.1"
   },
   "ava": {
-    "files": [
-      "test/**/*.test.js"
-    ]
+    "files": ["test/**/*.test.js"]
   }
 }
