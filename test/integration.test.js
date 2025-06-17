@@ -46,7 +46,7 @@ test("integration: file", async (t) => {
   const { execa } = await import("execa");
 
   const testTitle = slugify(t.title, { lower: true, strict: true });
-  const fixturePath = path.join(__dirname, `test-fixture_${testTitle}.json`);
+  const fixturePath = path.join(__dirname, `fixtures/${testTitle}.json`);
 
   t.notThrows(() => {
     writeFileSync(fixturePath, JSON.stringify(data));
@@ -57,10 +57,6 @@ test("integration: file", async (t) => {
     deepEqualMultiline(t, output, expected);
   } catch (e) {
     t.fail();
-  } finally {
-    t.notThrows(() => {
-      unlinkSync(fixturePath);
-    });
   }
 });
 
@@ -82,7 +78,7 @@ test("integration: file with invalid JSON", async (t) => {
   const invalidJSON = `{"repo":"revett/superprettyjson","keywords":["cli","json",]}`;
 
   const testTitle = slugify(t.title, { lower: true, strict: true });
-  const fixturePath = path.join(__dirname, `test-fixture_${testTitle}.json`);
+  const fixturePath = path.join(__dirname, `fixtures/${testTitle}.json`);
 
   t.notThrows(() => {
     writeFileSync(fixturePath, invalidJSON);
@@ -93,9 +89,5 @@ test("integration: file with invalid JSON", async (t) => {
   } catch (e) {
     t.is(e.exitCode, 1);
     t.is(e.stderr, "Error: Not valid JSON!");
-  } finally {
-    t.notThrows(() => {
-      unlinkSync(fixturePath);
-    });
   }
 });
