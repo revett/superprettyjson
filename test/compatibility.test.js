@@ -97,8 +97,10 @@ project. Your task is to review the forked project and identify any and all comp
 users migrating from the "rafeca/prettyjson" project to the "revett/superprettyjson" project.
 
 You will return a list of compatibility issues, with a detailed technical description of the issue
-(under 400 characters). Your aim is to list all issues, not just the most important ones, so please
-return up to 10 issues, and order them by severity.
+(under 400 characters). List up to 10 issues, and order them by severity.
+
+Do not nit pick with tiny overly specific issues, we are focusing on big pragmatic issues that
+developers migrating will actually care about and hit IRL, so please use your brain.
 
 If there are no compatibility issues, you will return "OK".
 
@@ -114,11 +116,7 @@ Always ignore the following issues, and never return them within your report:
 6. The moving of functions to different files within "lib/" directory
 7. Error messages now respecting the "noColor" flag and the introduction of "formatError()"
 8. "renderString()" now throws an error for invalid JSON, instead of returning a string
-9. Using "node:" prefix within imports
-10. Using "const" and "let" instead of "var"
-11. Use of template literals for string concatenation
-12. The "bin" entrypoints within "package.json" changing
-13. The supporting of CLI flags with a dash (e.g. "keys-color"), instead of "keysColor"
+9. The "bin" entrypoints within "package.json" changing
 
 ### Example
 
@@ -149,8 +147,6 @@ Always ignore the following issues, and never return them within your report:
       temperature: 0.2,
       input: prompt,
     });
-
-    console.log(response);
 
     if (response.status !== "completed") {
       t.fail(`OpenAI response status is not completed: ${response.status}`);
