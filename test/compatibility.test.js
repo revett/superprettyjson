@@ -35,7 +35,8 @@ test("compatibility: check against rafeca/prettyjson@v1.2.5", async (t) => {
 
         return { path: p, content: content.trim(), language: ext.slice(1) };
       } catch (e) {
-        t.fail(e);
+        console.log(e);
+        t.fail();
       }
     }),
   );
@@ -60,7 +61,8 @@ test("compatibility: check against rafeca/prettyjson@v1.2.5", async (t) => {
         const ext = path.extname(p) || ".js";
         return { path: p, content: content.trim(), language: ext.slice(1) };
       } catch (e) {
-        t.fail(e);
+        console.log(e);
+        t.fail();
       }
     }),
   );
@@ -170,6 +172,7 @@ Always ignore the following issues, and never return them within your report:
       t.fail();
     }
   } catch (e) {
-    t.fail(e);
+    console.log(e);
+    t.fail();
   }
 });
